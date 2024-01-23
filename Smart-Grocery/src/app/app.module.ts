@@ -9,13 +9,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ContentLimitterPipe } from './pipe/content-limitter.pipe';
 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { EditProductComponent } from './components/edit-product/edit-product.component';
+import { ViewProductDetailsComponent } from './components/view-product-details/view-product-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductsComponent,
     AddProductComponent,
-    ContentLimitterPipe
+    ContentLimitterPipe,
+    EditProductComponent,
+    ViewProductDetailsComponent
   ],
   imports: [
     BrowserModule,

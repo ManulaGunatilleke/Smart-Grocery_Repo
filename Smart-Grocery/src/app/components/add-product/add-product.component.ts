@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import { Product } from '../../model/product.model';
 import { ProductService } from '../../service/product.service';
@@ -9,15 +9,6 @@ import { ProductService } from '../../service/product.service';
   styleUrls: ['./add-product.component.css']
 })
 export class AddProductComponent implements OnInit {
-
-  ngOnInit(): void {}
-
-  isDataUploading = false;
-
-  constructor(
-    private fb: FormBuilder,
-    private productService: ProductService
-  ) {}
 
   productFrom = this.fb.group({
     productName: ['', Validators.required],
@@ -31,6 +22,17 @@ export class AddProductComponent implements OnInit {
     quantity: ['', [Validators.required, Validators.min(50)]],
   });
 
+  isDataUploading = false;
+  @Output() productAddEvent : EventEmitter<void> = new EventEmitter<void>();
+  @Output() closeAddEvent : EventEmitter<void> = new EventEmitter<void>();
+
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService
+  ) {}
+
+  ngOnInit(): void {}
+
   get f() {
     return this.productFrom.controls;
   }
@@ -42,8 +44,13 @@ export class AddProductComponent implements OnInit {
     this.productService.addProduct(values as Product).subscribe((res) => {
       debugger;
       this.isDataUploading = false;
+      this.productAddEvent.emit();
       this.productFrom.reset();
     });
+  }
+
+  cancle(){
+    this.closeAddEvent.emit();
   }
 
 }

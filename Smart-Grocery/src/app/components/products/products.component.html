@@ -1,8 +1,8 @@
 <div class="container-fluid main-content">
     <div class="row">
-      <section [ngClass]="showAddProduct ? 'col-md-7' : 'col-md-12'">
+      <section [ngClass]="showAddProduct || showEditProduct ? 'col-md-7' : 'col-md-12'">
         <div class="product-header">
-          <h1>Product List
+          <h1>Product List {{message}}
               <span *ngIf="!isLoading" (click)="refresh()" style="cursor: pointer;">
                   <i class="fa fa-refresh" aria-hidden="true"></i>
               </span>
@@ -41,7 +41,7 @@
           <tbody>
             <tr
               *ngFor="let product of products; let i = index"
-              (click)="selectProduct(i)"
+              (click)="selectProduct(i,product.id)"
               [ngClass]="rowIndex == i ? 'active' : ''"
             >
               <td>{{ product.id }}</td>
@@ -66,6 +66,7 @@
                   type="button"
                   [disabled]="rowIndex != i"
                   class="btn-xs icon"
+                  (click) = "OpenEditProductView()"
                 >
                   <i class="fa fa-pencil-square-o"></i>
                 </button>
@@ -74,9 +75,12 @@
           </tbody>
         </table>
       </section>
-      <section class="col-md-5" *ngIf="showAddProduct">
-        <app-add-product></app-add-product>
-      </section>
+      
+        <section class="col-md-5" *ngIf="showAddProduct || showEditProduct">
+          <app-add-product *ngIf="showAddProduct" (productAddEvent) = "updateProductList()" (closeAddEvent) = "closeAddView()"></app-add-product>
+          <app-edit-product *ngIf="showEditProduct" [productId] = "selectedProductId" (cancelEditEvent) = "closeEditView()"></app-edit-product>
+        </section>
+      
     </div>
   </div>
   
