@@ -8,6 +8,8 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContentLimitterPipe } from './pipe/content-limitter.pipe';
 
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +20,8 @@ import { ContentLimitterPipe } from './pipe/content-limitter.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
     provideClientHydration()
