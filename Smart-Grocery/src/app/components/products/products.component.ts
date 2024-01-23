@@ -9,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class ProductsComponent implements OnInit {
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    alert('ngOnInit hook is called!');
+  }
 
   public firstProductItemName = 'White Basmathi Rice';
 
@@ -18,6 +20,9 @@ export class ProductsComponent implements OnInit {
 
   public InventoryForFlour = 50;
   public isFlourProductInventory = false;
+
+  public rowIndex!: number;
+  showAddProduct!: boolean;
 
   public getPriceofRice() {
     return 350;
@@ -56,7 +61,7 @@ export class ProductsComponent implements OnInit {
     'productName' : "White Basmathi Rice",
     'createdDate': "Jan 29, 2020",
     'quantity': 100,
-    'unitPrice': "Rs. 400",
+    'unitPrice': "400",
     'productDescription':"White Basmathi Rice imported from pakistan"
   },
   { 
@@ -64,7 +69,7 @@ export class ProductsComponent implements OnInit {
   'productName' : "Flour",
   'createdDate': "Jan 29, 2020",
   'quantity': 50,
-  'unitPrice': "Rs. 190",
+  'unitPrice': "190",
   'productDescription':"Super Fine Whole grain general Purpose flour"
   },
   
@@ -73,17 +78,29 @@ export class ProductsComponent implements OnInit {
     'productName' : "sugar",
     'createdDate': "Jan 29, 2020",
     'quantity': 1200,
-    'unitPrice': "Rs. 200",
+    'unitPrice': "200",
     'productDescription':"White sugar manufactured by Palwatte Factory"
   },{
     'productId' : "004",
     'productName' : "Dhal",
     'createdDate': "Jan 29, 2020",
     'quantity': 10,
-    'unitPrice': "Rs. 200",
+    'unitPrice': "200",
     'productDescription':"Imported mysoor dhal from India"
   }
   
   ]
+
+  public selectProduct(selectedRow: number) {
+    this.rowIndex = selectedRow;
+  }
+
+  showAddProducts() {
+    this.showAddProduct = true;
+  }
+
+  hideAddProducts() {
+    this.showAddProduct = false;
+  }
 
 }
