@@ -1,43 +1,35 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Product } from '../../model/product.model';
 import { ProductService } from '../../service/product.service';
-import { ViewProductDetailsComponent } from '../view-product-details/view-product-details.component';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
-  
 })
 export class ProductsComponent implements OnInit {
   public rowIndex!: number;
   showAddProduct!: boolean;
   isLoading: boolean = false;
-  showEditProduct!: boolean; 
-  selectedProductId!: number;
-  message! : string;
-  @ViewChild(ViewProductDetailsComponent) viewComponent! : ViewProductDetailsComponent;
-
+  showEditProduct!: boolean;
+  selectedProduct!: Product;
+  message!: string;
+  public products: Product[] = [];
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.getProducts();
   }
 
-  ngAfterViewInit(){
-    if (this.viewComponent) {
-      this.message = this.viewComponent.childMessage;
-    }
-  }
-
-  public products: Product[] = [];
-
-  public selectProduct(selectedRow: number, selectedId : number) {
+  public selectProduct(selectedRow: any, product: Product) {
     this.rowIndex = selectedRow;
-    this.selectedProductId = selectedId;
+    this.selectedProduct = product;
   }
 
   showAddProducts() {
+    if (this.showEditProduct) {
+      this.showEditProduct = false;
+    }
     this.showAddProduct = true;
   }
 
@@ -56,28 +48,22 @@ export class ProductsComponent implements OnInit {
       this.isLoading = false;
     });
   }
-  // getProductsToQuantity() {
-  //   this.isLoading = true;
-  //   this.productService.getProductsToQuantity().subscribe((res) => {
-  //     this.products = res.data;
-  //     this.isLoading = false;
-  //   });
-  // }
 
-  updateProductList(){
-    this.getProducts();
-  }
-
-  OpenEditProductView(){
+  OpenEditProductView() {
+    if (this.showAddProduct) {
+      this.showAddProduct = false;
+    }
     this.showEditProduct = true;
   }
 
-  closeEditView(){
+  closeEditView() {
     this.showEditProduct = false;
   }
 
-  closeAddView(){
-    this.showAddProduct = false;
+  updateProductList() {
+    this.getProducts();
   }
-
+}
+function ViewProductComponent(ViewProductComponent: any) {
+  throw new Error('Function not implemented.');
 }

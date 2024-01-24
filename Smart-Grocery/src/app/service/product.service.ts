@@ -33,4 +33,8 @@ export class ProductService {
   getProductsToQuantity(): Observable<ProductResponse> {
     return this.http.get<ProductResponse>(this.baseUrl + 'api/products/{quantity}');
   }
+  
+  updateProduct(product: Product): Observable<any> {
+    return this.http.put<any>(this.baseUrl + 'api/products', product);
+  }
 }

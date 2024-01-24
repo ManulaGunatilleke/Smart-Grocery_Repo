@@ -1,15 +1,14 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Product } from '../../model/product.model';
 import { ProductService } from '../../service/product.service';
 
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
-  styleUrls: ['./add-product.component.css']
+  styleUrls: ['./add-product.component.css'],
 })
 export class AddProductComponent implements OnInit {
-
   productFrom = this.fb.group({
     productName: ['', Validators.required],
     description: ['', Validators.required],
@@ -23,8 +22,8 @@ export class AddProductComponent implements OnInit {
   });
 
   isDataUploading = false;
-  @Output() productAddEvent : EventEmitter<void> = new EventEmitter<void>();
-  @Output() closeAddEvent : EventEmitter<void> = new EventEmitter<void>();
+  @Output() cancelAddView: EventEmitter<void> = new EventEmitter<void>();
+  @Output() productAddEvent: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -42,15 +41,13 @@ export class AddProductComponent implements OnInit {
     values.createdDate = new Date().toDateString();
     this.isDataUploading = true;
     this.productService.addProduct(values as Product).subscribe((res) => {
-      debugger;
-      this.isDataUploading = false;
       this.productAddEvent.emit();
+      this.isDataUploading = false;
       this.productFrom.reset();
     });
   }
 
-  cancle(){
-    this.closeAddEvent.emit();
+  cancel() {
+    this.cancelAddView.emit();
   }
-
 }
