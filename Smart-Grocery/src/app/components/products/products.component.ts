@@ -1,98 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Product } from '../../model/product.model';
+import { ProductService } from '../../service/product.service';
+import { ViewProductDetailsComponent } from '../view-product-details/view-product-details.component';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
-  interpolation: ["?","?"],
+  
 })
 export class ProductsComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {
-    alert('ngOnInit hook is called!');
-  }
-
-  public firstProductItemName = 'White Basmathi Rice';
-
-  public InventoryForRice = 350;
-  public isRiceProductInventory = false;
-
-  public InventoryForFlour = 50;
-  public isFlourProductInventory = false;
-
   public rowIndex!: number;
   showAddProduct!: boolean;
+  isLoading: boolean = false;
+  showEditProduct!: boolean; 
+  selectedProductId!: number;
+  message! : string;
+  @ViewChild(ViewProductDetailsComponent) viewComponent! : ViewProductDetailsComponent;
 
-  public getPriceofRice() {
-    return 350;
+  constructor(private productService: ProductService) {}
+
+  ngOnInit(): void {
+    this.getProducts();
   }
 
-  public secondProductItemName = 'Wheat Flour';
-
-  public getQuantityofFlour() {
-    return 225;
-  }
-
-  public getRiceInventory() {
-    if (this.InventoryForRice >= 50 && this.InventoryForRice <= 200) {
-      this.isRiceProductInventory = true;
-    } else if (this.InventoryForRice >= 50) {
-      this.isRiceProductInventory = false;
+  ngAfterViewInit(){
+    if (this.viewComponent) {
+      this.message = this.viewComponent.childMessage;
     }
-
-    return this.InventoryForRice;  
-
   }
 
-  public getFlourInventory() {
-    if (this.InventoryForFlour >= 50 && this.InventoryForFlour <= 200) {
-      this.isFlourProductInventory = true;
-    } else if (this.InventoryForFlour >= 50) {
-      this.isFlourProductInventory = false;
-    }
+  public products: Product[] = [];
 
-    return this.InventoryForFlour;
-
-  }
-
-  public products = [{
-    'productId' : "001",
-    'productName' : "White Basmathi Rice",
-    'createdDate': "Jan 29, 2020",
-    'quantity': 100,
-    'unitPrice': "400",
-    'productDescription':"White Basmathi Rice imported from pakistan"
-  },
-  { 
-  'productId' : "002",
-  'productName' : "Flour",
-  'createdDate': "Jan 29, 2020",
-  'quantity': 50,
-  'unitPrice': "190",
-  'productDescription':"Super Fine Whole grain general Purpose flour"
-  },
-  
-  { 
-    'productId' : "003",
-    'productName' : "sugar",
-    'createdDate': "Jan 29, 2020",
-    'quantity': 1200,
-    'unitPrice': "200",
-    'productDescription':"White sugar manufactured by Palwatte Factory"
-  },{
-    'productId' : "004",
-    'productName' : "Dhal",
-    'createdDate': "Jan 29, 2020",
-    'quantity': 10,
-    'unitPrice': "200",
-    'productDescription':"Imported mysoor dhal from India"
-  }
-  
-  ]
-
-  public selectProduct(selectedRow: number) {
+  public selectProduct(selectedRow: number, selectedId : number) {
     this.rowIndex = selectedRow;
+    this.selectedProductId = selectedId;
   }
 
   showAddProducts() {
@@ -100,6 +42,41 @@ export class ProductsComponent implements OnInit {
   }
 
   hideAddProducts() {
+    this.showAddProduct = false;
+  }
+
+  refresh() {
+    this.getProducts();
+  }
+
+  getProducts() {
+    this.isLoading = true;
+    this.productService.getProducts().subscribe((res) => {
+      this.products = res.data;
+      this.isLoading = false;
+    });
+  }
+  // getProductsToQuantity() {
+  //   this.isLoading = true;
+  //   this.productService.getProductsToQuantity().subscribe((res) => {
+  //     this.products = res.data;
+  //     this.isLoading = false;
+  //   });
+  // }
+
+  updateProductList(){
+    this.getProducts();
+  }
+
+  OpenEditProductView(){
+    this.showEditProduct = true;
+  }
+
+  closeEditView(){
+    this.showEditProduct = false;
+  }
+
+  closeAddView(){
     this.showAddProduct = false;
   }
 
